@@ -1,0 +1,46 @@
+name: Shift-Left Sentinel CI
+
+# Module 1: Ingestion - Trigger on pushes and pull requests to main branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  security_scan:
+    # Provision an ephemeral Ubuntu container
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Get the source code from the repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Module 2: Detection & Analysis (SAST)
+      # Runs Semgrep and generates the raw JSON telemetry
+      - name: Run Semgrep (SAST)
+        run: |
+          pip install semgrep
+          semgrep scan --config auto --json --output semgrep_output.json
+
+      # Module 2: Detection & Analysis (SCA)
+      # Runs Trivy to check dependencies in requirements.txt
+      - name: Run Trivy (SCA)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          format: 'json'
+          output: 'trivy_output.json'
+
+      # Setup Python for the Logic Engine
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      # Module 4: Enforcement Handshake
+      # This step triggers your partner's script (Role 2)
+      - name: Execute Risk Engine
+        run: |
+          python3 scripts/risk_engine.py
