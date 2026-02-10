@@ -3,3 +3,9 @@ requests==2.20.0
 flask==1.1.1
 jinja2==2.10.1
 scikit-learn==1.5.1
+
+# Dashboard runtime dependencies
+matplotlib>=3.8,<4
+numpy>=1.26,<3
+pandas>=2.2,<3
+streamlit>=1.36,<2
