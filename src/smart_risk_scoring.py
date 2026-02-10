@@ -97,7 +97,10 @@ class SmartRiskScorer:
         feature_vector = [[normalized[col] for col in FEATURE_COLUMNS]]
 
         probabilities = self.model.predict_proba(feature_vector)[0]
-        low_prob, high_prob = float(probabilities[0]), float(probabilities[1])
+        class_labels = [int(label) for label in self.model.classes_]
+
+        low_prob = float(probabilities[class_labels.index(0)]) if 0 in class_labels else 0.0
+        high_prob = float(probabilities[class_labels.index(1)]) if 1 in class_labels else 0.0
         predicted_high_risk = high_prob >= 0.5
 
         return {
