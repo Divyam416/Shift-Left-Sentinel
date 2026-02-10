@@ -21,3 +21,45 @@ Scoring: It calculates a weighted Risk Score (0-100) based on the severity and q
 4. Enforcement Gate (Module 4)
 Proactive Blocking: If the calculated Risk Score exceeds the threshold (80), the script exits with a failure code.
 Gatekeeping: GitHub Actions interprets the exit code to physically block the merge, forcing developers to remediate risks before proceeding.
+
+## Smart Risk Scoring (ML Upgrade)
+
+A new module `src/smart_risk_scoring.py` introduces a scikit-learn `RandomForestClassifier` risk model.
+
+### Features used by the model
+- `code_churn` (int)
+- `file_entropy` (float)
+- `author_risk_score` (float)
+
+### Output
+The scorer returns:
+- `risk_label` (`high` or `low`)
+- `risk_probability` (probability of high risk, `0.0-1.0`)
+- `confidence_score` (confidence in predicted label, `0.0-1.0`)
+
+### Feedback loop / self-correction
+`FeedbackLoop.retrain_model(commit_data, was_false_positive)` appends feedback to a local CSV registry and retrains the model so false-positive patterns are learned as low risk over time.
+
+### Persistence
+- Model is persisted to `smart_risk_model.pkl`.
+- Feedback examples are stored in `feedback_registry.csv`.
+
+### Minimal usage
+```python
+from src.smart_risk_scoring import SmartRiskScorer, FeedbackLoop
+
+scorer = SmartRiskScorer(model_path="smart_risk_model.pkl")
+feedback = FeedbackLoop(scorer, registry_path="feedback_registry.csv")
+
+commit = {
+    "code_churn": 140,
+    "file_entropy": 5.2,
+    "author_risk_score": 0.41,
+}
+
+result = scorer.predict_risk(commit)
+print(result)
+
+# Human marks flagged commit as false positive
+feedback.retrain_model(commit, was_false_positive=True)
+```
