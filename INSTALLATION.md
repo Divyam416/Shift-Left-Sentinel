@@ -28,24 +28,11 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-## 4) Install dependencies
-
-### 4a) Core dependencies (production-safe)
+## 4) Install Python dependencies
 ```bash
 python -m pip install --upgrade pip
 pip install -r src/requirements.txt
-```
-
-### 4b) Dashboard dependencies
-```bash
-pip install -r src/dashboard_requirements.txt
-```
-
-### 4c) Optional vulnerable demo dependencies (scanner showcase only)
-If you want guaranteed Trivy findings during demos, install these in a separate throwaway environment:
-
-```bash
-pip install -r src/requirements_vuln_demo.txt
+pip install streamlit pandas matplotlib
 ```
 
 ## 5) Verify tool availability
@@ -69,7 +56,7 @@ trivy --version
 semgrep scan --config auto --json --output semgrep_output.json .
 trivy fs --scanners vuln --format json --output trivy_output.json .
 python risk_calculator.py
-python -m streamlit run dashboard_realtime.py  # using env with dashboard_requirements
+python -m streamlit run dashboard_realtime.py
 ```
 
 ## 8) Validate persistence layer

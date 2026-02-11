@@ -25,9 +25,10 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install scanner dependencies
+      - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
+          if [ -f src/requirements.txt ]; then pip install -r src/requirements.txt; fi
           pip install semgrep
 
       - name: Run Semgrep

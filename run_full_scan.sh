@@ -63,13 +63,4 @@ if [[ "$risk_exit" -ne 0 ]]; then
 fi
 
 echo "✅ Risk score within threshold. Launching realtime dashboard..."
-if python - <<'PY2'
-import importlib.util
-raise SystemExit(0 if importlib.util.find_spec("streamlit") else 1)
-PY2
-then
-  python -m streamlit run dashboard_realtime.py
-else
-  echo "⚠️ Streamlit is not installed in this environment."
-  echo "   Install dashboard deps with: pip install -r src/dashboard_requirements.txt"
-fi
+python -m streamlit run dashboard_realtime.py

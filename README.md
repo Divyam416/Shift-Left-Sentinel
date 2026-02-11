@@ -104,6 +104,3 @@ Helpful docs:
 - `INSTALLATION.md`
 - `README_DEMO.md`
 - `.github/workflows/security-scan.yml`
-
-
-Dependency note: `src/requirements.txt` now uses production-safe defaults. For scanner showcase demos with intentional CVEs, use `src/requirements_vuln_demo.txt` in a separate throwaway environment.
