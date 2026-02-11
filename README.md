@@ -1,3 +1,6 @@
+![Security Scan Pipeline](https://github.com/Divyam416/Shift-Left-Sentinel/actions/workflows/security-scan.yml/badge.svg)
+![Legacy Sentinel CI](https://github.com/Divyam416/Shift-Left-Sentinel/actions/workflows/sentinel.yml/badge.svg)
+
 
 Shift-Left Sentinel: Automated DevSecOps Gate
 Shift-Left Sentinel is a proactive security framework that integrates automated vulnerability scanning directly into the developer workflow. By analyzing code and dependencies during the Pull Request stage, it prevents high-risk vulnerabilities from ever reaching the main branch.
@@ -63,3 +66,12 @@ print(result)
 # Human marks flagged commit as false positive
 feedback.retrain_model(commit, was_false_positive=True)
 ```
+
+
+## Realtime Dashboard + Persistence Layer
+
+The project now includes a SQLite-backed persistence layer and a realtime dashboard:
+- `src/data_store.py` stores scan results, flagged commits, and ML feedback.
+- `risk_calculator.py` persists each scan with git metadata and severity counts.
+- `dashboard_realtime.py` visualizes live scan trends and supports false-positive feedback actions.
+
