@@ -1,5 +1,10 @@
-# These versions are intentionally old/vulnerable for testing
+# These versions are intentionally old/vulnerable for testing scanner behavior
 requests==2.20.0
 flask==1.1.1
 jinja2==2.10.1
 scikit-learn==1.5.1
+
+# Dashboard/runtime dependencies
+streamlit==1.37.1
+pandas==2.2.2
+matplotlib==3.9.0
