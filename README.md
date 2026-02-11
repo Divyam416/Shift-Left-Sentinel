@@ -75,3 +75,32 @@ The project now includes a SQLite-backed persistence layer and a realtime dashbo
 - `risk_calculator.py` persists each scan with git metadata and severity counts.
 - `dashboard_realtime.py` visualizes live scan trends and supports false-positive feedback actions.
 
+
+
+## Architecture Diagram (Current End-to-End)
+
+```mermaid
+flowchart LR
+  A[Developer Push / PR] --> B[GitHub Actions security-scan.yml]
+  B --> C[Semgrep JSON]
+  B --> D[Trivy JSON]
+  C --> E[risk_calculator.py]
+  D --> E
+  E --> F[(SQLite: security_scans.db)]
+  F --> G[dashboard_realtime.py]
+  G --> H[Human review false-positive]
+  H --> I[ml_feedback + feedback_registry.csv]
+  I --> J[smart_risk_scoring.py retrain]
+```
+
+
+## Run Full Demo Locally
+
+```bash
+./run_full_scan.sh
+```
+
+Helpful docs:
+- `INSTALLATION.md`
+- `README_DEMO.md`
+- `.github/workflows/security-scan.yml`
