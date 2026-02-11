@@ -21,11 +21,12 @@ SEVERITY_WEIGHTS = {
 # NEW: Context Multipliers (The "Intelligence" Layer)
 # If a file path matches these keywords, multiply the score.
 CONTEXT_MULTIPLIERS = {
-    'production': 1.0,  # Standard code
-    'test': 0.1,        # Test files (Low risk)
-    'docs': 0.0,        # Documentation (Zero risk)
-    'config': 1.5,      # Config files (High risk for secrets!)
-    'ci_cd': 2.0        # Pipeline files (Extreme risk!)
+    'production': 1.0,      # Standard code
+    'test': 0.1,            # Test files (Low risk)
+    'docs': 0.0,            # Documentation (Zero risk)
+    'config': 1.5,          # Config files (High risk for secrets!)
+    'dependencies': 2.0,    # requirements.txt, package.json (VERY HIGH RISK!)
+    'infrastructure': 2.0   # Pipeline files (Extreme risk!)
 }
 
 def get_context_multiplier(filepath):
@@ -34,17 +35,23 @@ def get_context_multiplier(filepath):
     """
     filepath = str(filepath).lower()
     
-    # Priority Checks
+    # Priority Checks (order matters!)
+    
+    # Check for dependency files FIRST (before .txt check)
+    if any(x in filepath for x in ['requirements.txt', 'package.json', 'package-lock.json', 'pom.xml', 'go.mod']):
+        return CONTEXT_MULTIPLIERS['dependencies']
+    
     if any(x in filepath for x in ['test/', 'tests/', '_test.py', '.spec.js']):
         return CONTEXT_MULTIPLIERS['test']
     
-    if any(x in filepath for x in ['.md', '.txt', 'docs/']):
+    # Now check for docs (but requirements.txt already handled above)
+    if any(x in filepath for x in ['.md', 'readme', 'docs/', 'documentation/']):
         return CONTEXT_MULTIPLIERS['docs']
         
-    if any(x in filepath for x in ['dockerfile', 'docker-compose', '.github/', 'jenkinsfile']):
+    if any(x in filepath for x in ['dockerfile', 'docker-compose', '.github/', 'jenkinsfile', '.gitlab-ci']):
         return CONTEXT_MULTIPLIERS['infrastructure']
         
-    if any(x in filepath for x in ['config', '.env', 'settings.py']):
+    if any(x in filepath for x in ['config', '.env', 'settings.py', '.yaml', '.yml']):
         return CONTEXT_MULTIPLIERS['config']
         
     # Default to production code
@@ -179,4 +186,5 @@ def main():
         sys.exit(0) # This tells GitHub Actions to PASS
 
 if __name__ == "__main__":
+
     main()
