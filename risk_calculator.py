@@ -137,6 +137,7 @@ def is_high_entropy(secret_string, threshold=4.5):
 
 def calculate_risk_score(issues):
     total_score = 0
+    max_possible_score = len(issues) * 40 * 2.0
     print("\n--- Risk Calculation Details (Context-Aware) ---")
 
     for issue in issues:
@@ -157,7 +158,13 @@ def calculate_risk_score(issues):
         
         total_score += final_weight
 
-    return total_score
+    # Normalize to 0-100
+    if max_possible_score > 0:
+        normalized_score = min(100, (total_score / max_possible_score) * 100)
+    else:
+        normalized_score = 0
+    
+    return int(normalized_score)
 
 def main():
     print("--- Shift-Left Sentinel: Risk Calculator ---")
@@ -188,3 +195,4 @@ def main():
 if __name__ == "__main__":
 
     main()
+
