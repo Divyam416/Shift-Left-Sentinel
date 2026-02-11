@@ -1,0 +1,4 @@
+# Dashboard/runtime dependencies (kept separate to avoid conflicts with vulnerable scan deps)
+streamlit==1.37.1
+pandas==2.2.2
+matplotlib==3.9.0
