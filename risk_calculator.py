@@ -4,7 +4,7 @@ import math
 import re
 
 # Configuration: We will tweak these later in Phase 2
-RISK_THRESHOLD = 80
+RISK_THRESHOLD = 30
 
 # Mapping severity labels to risk points
 SEVERITY_WEIGHTS = {
@@ -195,4 +195,5 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
