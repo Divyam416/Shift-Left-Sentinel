@@ -1,5 +1,5 @@
 # These versions are intentionally old/vulnerable for testing scanner behavior
-requests==2.20.0
+requests==3.20.0
 flask==1.1.1
 jinja2==2.10.1
 scikit-learn==1.5.1
