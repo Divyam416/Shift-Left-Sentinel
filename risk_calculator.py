@@ -12,9 +12,10 @@ if str(SRC_DIR) not in sys.path:
     sys.path.append(str(SRC_DIR))
 
 from data_store import DataStore
+from project_config import get_risk_threshold
 
-# Configuration: We will tweak these later in Phase 2
-RISK_THRESHOLD = 30
+# Centralized risk threshold from config/project_config.json
+RISK_THRESHOLD = get_risk_threshold()
 
 # Mapping severity labels to risk points
 SEVERITY_WEIGHTS = {

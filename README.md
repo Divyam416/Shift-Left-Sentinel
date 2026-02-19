@@ -22,7 +22,7 @@ RWCS Algorithm: A Python-based engine (risk_engine.py) that parses the JSON tele
 Scoring: It calculates a weighted Risk Score (0-100) based on the severity and quantity of findings.
 
 4. Enforcement Gate (Module 4)
-Proactive Blocking: If the calculated Risk Score exceeds the threshold (80), the script exits with a failure code.
+Proactive Blocking: If the calculated Risk Score exceeds the configured threshold (default: 80 from `config/project_config.json`), the script exits with a failure code.
 Gatekeeping: GitHub Actions interprets the exit code to physically block the merge, forcing developers to remediate risks before proceeding.
 
 ## Smart Risk Scoring (ML Upgrade)
