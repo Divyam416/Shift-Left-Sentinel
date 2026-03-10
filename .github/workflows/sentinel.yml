@@ -27,7 +27,7 @@ jobs:
       # Module 2: Detection & Analysis (SCA)
       # Runs Trivy to check dependencies in requirements.txt
       - name: Run Trivy (SCA)
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.29.0
         with:
           scan-type: 'fs'
           format: 'json'
@@ -43,7 +43,7 @@ jobs:
       # This step triggers your partner's script (Role 2)
       - name: Execute Risk Engine
         run: |
-          python3 scripts/risk_engine.py
+          python3 scripts/risk_engine.py .
 
       - name: Upload Security Reports
         uses: actions/upload-artifact@v4
