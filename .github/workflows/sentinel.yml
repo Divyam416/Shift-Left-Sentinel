@@ -17,31 +17,29 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Module 2: Detection & Analysis (SAST)
-      # Runs Semgrep and generates the raw JSON telemetry
-      - name: Run Semgrep (SAST)
-        run: |
-          pip install semgrep
-          semgrep scan --config auto --json --output semgrep_output.json
-
-      # Module 2: Detection & Analysis (SCA)
-      # Runs Trivy to check dependencies in requirements.txt
-      - name: Run Trivy (SCA)
-        uses: aquasecurity/trivy-action@0.32.0
-        with:
-          scan-type: 'fs'
-          format: 'json'
-          output: 'trivy_output.json'
-          trivy-version: '0.58.1'
-
-      # Setup Python for the Logic Engine
+      # Setup Python for scanner and logic engine
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
+      # Module 2: Detection & Analysis (SAST)
+      - name: Run Semgrep (SAST)
+        run: |
+          pip install semgrep
+          semgrep scan --config auto --json --output semgrep_output.json .
+
+      # Module 2: Detection & Analysis (SCA)
+      - name: Install Trivy CLI
+        uses: aquasecurity/setup-trivy@v0.2.2
+        with:
+          version: v0.58.1
+
+      - name: Run Trivy (SCA)
+        run: |
+          trivy fs . --format json --output trivy_output.json --quiet
+
       # Module 4: Enforcement Handshake
-      # This step triggers your partner's script (Role 2)
       - name: Execute Risk Engine
         run: |
           python3 scripts/risk_engine.py .
