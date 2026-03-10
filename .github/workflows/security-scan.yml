@@ -37,13 +37,14 @@ jobs:
           semgrep scan --config auto --json --output semgrep_output.json .
 
       - name: Run Trivy filesystem scan
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@0.32.0
         with:
           scan-type: fs
           format: json
           output: trivy_output.json
           severity: CRITICAL,HIGH,MEDIUM,LOW
           ignore-unfixed: true
+          trivy-version: 0.58.1
 
       - name: Execute risk calculator (enforcement gate)
         id: risk_gate

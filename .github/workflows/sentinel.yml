@@ -27,11 +27,12 @@ jobs:
       # Module 2: Detection & Analysis (SCA)
       # Runs Trivy to check dependencies in requirements.txt
       - name: Run Trivy (SCA)
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@0.32.0
         with:
           scan-type: 'fs'
           format: 'json'
           output: 'trivy_output.json'
+          trivy-version: '0.58.1'
 
       # Setup Python for the Logic Engine
       - name: Set up Python
