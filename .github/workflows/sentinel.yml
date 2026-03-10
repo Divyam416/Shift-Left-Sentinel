@@ -30,10 +30,13 @@ jobs:
           semgrep scan --config auto --json --output semgrep_output.json .
 
       # Module 2: Detection & Analysis (SCA)
-      - name: Install Trivy CLI
-        uses: aquasecurity/setup-trivy@v0.2.2
-        with:
-          version: v0.58.1
+      - name: Install Trivy
+        run: |
+          curl -sfL https://github.com/aquasecurity/trivy/releases/download/v0.58.1/trivy_0.58.1_Linux-64bit.tar.gz -o trivy.tar.gz
+          tar zxvf trivy.tar.gz
+          sudo mv trivy /usr/local/bin/
+          chmod +x /usr/local/bin/trivy
+          trivy --version || echo "Trivy install failed, exit code: $?"
 
       - name: Run Trivy (SCA)
         run: |
