@@ -33,11 +33,8 @@ jobs:
 
       - name: Install Trivy
         run: |
-          curl -sfL https://github.com/aquasecurity/trivy/releases/download/v0.58.1/trivy_0.58.1_Linux-64bit.tar.gz -o trivy.tar.gz
-          tar zxvf trivy.tar.gz
-          sudo mv trivy /usr/local/bin/
-          chmod +x /usr/local/bin/trivy
-          trivy --version || echo "Trivy install failed, exit code: $?"
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
+          trivy --version
 
       - name: Run Semgrep
         continue-on-error: true
