@@ -31,19 +31,24 @@ jobs:
           if [ -f src/requirements.txt ]; then pip install -r src/requirements.txt; fi
           pip install semgrep
 
+      - name: Install Trivy
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
+          trivy --version
+
       - name: Run Semgrep
         continue-on-error: true
         run: |
           semgrep scan --config auto --json --output semgrep_output.json .
 
       - name: Run Trivy filesystem scan
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          scan-type: fs
-          format: json
-          output: trivy_output.json
-          severity: CRITICAL,HIGH,MEDIUM,LOW
-          ignore-unfixed: true
+        run: |
+          trivy fs . \
+            --format json \
+            --output trivy_output.json \
+            --severity CRITICAL,HIGH,MEDIUM,LOW \
+            --ignore-unfixed \
+            --quiet
 
       - name: Execute risk calculator (enforcement gate)
         id: risk_gate
